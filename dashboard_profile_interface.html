@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        /* Efectos de fondo animados */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(136, 107, 217, 0.15) 0%, transparent 70%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
+        }
+
+        .mobile-container {
+            width: 320px;
+            height: 640px;
+            background: linear-gradient(180deg, 
+                #c471f5 0%, 
+                #ba68c8 20%, 
+                #ab47bc 40%, 
+                #9c27b0 60%, 
+                #8e24aa 80%,
+                #7b1fa2 100%);
+            border-radius: 30px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 0 8px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: deviceFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes deviceFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(0.5deg); }
+            50% { transform: translateY(-5px) rotate(0deg); }
+            75% { transform: translateY(-12px) rotate(-0.5deg); }
+        }
+
+        /* Efectos de luz interna */
+        .mobile-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 60% 90%, rgba(255, 255, 255, 0.06) 0%, transparent 30%);
+            pointer-events: none;
+            animation: lightShift 12s ease-in-out infinite;
+        }
+
+        @keyframes lightShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .content-wrapper {
+            padding: 3rem 2rem 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .top-section {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            animation: slideInTop 1s ease-out;
+        }
+
+        .bookmark-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .bookmark-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: iconSpin 6s linear infinite;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .bookmark-icon:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .bookmark-icon i {
+            font-size: 1.8rem;
+            color: white;
+            z-index: 2;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInScale 1s ease-out 0.3s both;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1rem;
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-avatar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            animation: avatarShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes avatarShimmer {
+            0% { left: -100%; }
+            50% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-avatar i {
+            font-size: 2.5rem;
+            color: #ba68c8;
+            z-index: 2;
+            position: relative;
+        }
+
+        .profile-name {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-section {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideInUp 1s ease-out 0.6s both;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-section:hover {
+            background: rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .dashboard-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .gauges-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .gauge {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gauge:hover {
+            transform: scale(1.1);
+        }
+
+        .gauge-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #2c2c2c 0deg,
+                #2c2c2c 45deg,
+                #4caf50 45deg,
+                #4caf50 90deg,
+                #ff9800 90deg,
+                #ff9800 135deg,
+                #f44336 135deg,
+                #f44336 180deg,
+                #2c2c2c 180deg
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gauge-circle::before {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .gauge-needle {
+            position: absolute;
+            width: 2px;
+            height: 35%;
+            background: white;
+            top: 15%;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(45deg);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: needleMove 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes needleMove {
+            0% { transform: translateX(-50%) rotate(25deg); }
+            100% { transform: translateX(-50%) rotate(65deg); }
+        }
+
+        .gauge:nth-child(2) .gauge-needle {
+            animation-delay: -1s;
+            animation-duration: 2.5s;
+        }
+
+        .gauge-center {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            z-index: 3;
+        }
+
+        .bottom-section {
+            animation: slideInBottom 1s ease-out 0.9s both;
+        }
+
+        .home-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .home-icon:hover::before {
+            left: 100%;
+        }
+
+        .home-icon:hover {
+            background: rgba(0, 0, 0, 0.35);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .home-icon i {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Animaciones de entrada */
+        @keyframes slideInTop {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInBottom {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 375px) {
+            .mobile-container {
+                width: 300px;
+                height: 600px;
+            }
+
+            .content-wrapper {
+                padding: 2.5rem 1.5rem 1.5rem;
+            }
+
+            .bookmark-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .bookmark-icon i {
+                font-size: 1.5rem;
+            }
+
+            .profile-avatar {
+                width: 70px;
+                height: 70px;
+            }
+
+            .profile-avatar i {
+                font-size: 2.2rem;
+            }
+
+            .profile-name {
+                font-size: 1.3rem;
+                letter-spacing: 1.5px;
+            }
+
+            .gauge {
+                width: 70px;
+                height: 70px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .mobile-container {
+                width: 280px;
+                height: 560px;
+            }
+
+            .profile-name {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+
+            .dashboard-section {
+                padding: 1.2rem;
+            }
+
+            .gauge {
+                width: 65px;
+                height: 65px;
+            }
+        }
+
+        /* Efectos especiales para desktop */
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+
+            .mobile-container {
+                transform: scale(1.1);
+            }
+
+            .mobile-container:hover {
+                transform: scale(1.15) translateY(-5px);
+                box-shadow: 
+                    0 35px 70px rgba(0, 0, 0, 0.5),
+                    0 0 0 8px rgba(255, 255, 255, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        /* Estados de loading */
+        .loading {
+            opacity: 0;
+            animation: fadeInDevice 2s ease-out forwards;
+        }
+
+        @keyframes fadeInDevice {
+            to { opacity: 1; }
+        }
+
+        /* Efectos de partículas para el dashboard */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleDrift 10s linear infinite;
+        }
+
+        @keyframes particleDrift {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container loading">
+        <div class="content-wrapper">
+            <div class="top-section">
+                <div class="bookmark-icon" onclick="handleBookmarkClick()">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-avatar" onclick="handleProfileClick()">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 class="profile-name">Your Name</h2>
+            </div>
+
+            <div class="dashboard-section">
+                <h3 class="dashboard-title">Dashboard</h3>
+                <div class="gauges-container">
+                    <div class="gauge" onclick="handleGaugeClick(this, 1)">
+                        <div class="gauge-circle">
+                            <div class="gauge-needle"></div>
+                            <div class="gauge-center"></div>
+                        </div>
+                    </div>
+                    <div class="gauge" onclick="handleGaugeClick(this, 2)">
+                        <div class="gauge-circle">
+                            <div class="gauge-needle"></div>
+                            <div class="gauge-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-section">
+                <div class="home-icon" onclick="handleHomeClick()">
+                    <i class="fas fa-home"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.mobile-container');
+            
+            // Remover estado de loading
+            setTimeout(() => {
+                container.classList.remove('loading');
+            }, 100);
+
+            // Crear partículas ambientales
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 10000);
+            }
+
+            // Generar partículas periódicamente
+            setInterval(createParticle, 3000);
+
+            // Actualizar valores de medidores periódicamente
+            function updateGauges() {
+                const needles = document.querySelectorAll('.gauge-needle');
+                needles.forEach((needle, index) => {
+                    const randomAngle = Math.random() * 90 + 20; // 20-110 grados
+                    needle.style.transform = `translateX(-50%) rotate(${randomAngle}deg)`;
+                });
+            }
+
+            // Actualizar medidores cada 5 segundos
+            setInterval(updateGauges, 5000);
+
+            // Efecto de respiración en el perfil
+            const profileAvatar = document.querySelector('.profile-avatar');
+            let breatheDirection = 1;
+            
+            function breatheEffect() {
+                const currentScale = breatheDirection > 0 ? 1.02 : 0.98;
+                profileAvatar.style.transform = `scale(${currentScale})`;
+                breatheDirection *= -1;
+            }
+            
+            setInterval(breatheEffect, 2000);
+        });
+
+        // Funciones de manejo de eventos
+        function handleBookmarkClick() {
+            const icon = document.querySelector('.bookmark-icon');
+            const currentIcon = icon.querySelector('i');
+            
+            // Cambiar ícono temporalmente
+            currentIcon.className = 'fas fa-check';
+            icon.style.background = 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)';
+            
+            setTimeout(() => {
+                currentIcon.className = 'fas fa-bookmark';
+                icon.style.background = 'linear-gradient(135deg, #9c27b0 0%, #673ab7 100%)';
+            }, 1500);
+        }
+
+        function handleProfileClick() {
+            const avatar = document.querySelector('.profile-avatar');
+            const name = document.querySelector('.profile-name');
+            
+            // Efecto de rotación en el avatar
+            avatar.style.transform = 'scale(1.2) rotate(360deg)';
+            name.style.color = '#4caf50';
+            
+            setTimeout(() => {
+                avatar.style.transform = 'scale(1)';
+                name.style.color = 'white';
+            }, 600);
+        }
+
+        function handleGaugeClick(gauge, index) {
+            const needle = gauge.querySelector('.gauge-needle');
+            const circle = gauge.querySelector('.gauge-circle');
+            
+            // Animación de medidor activo
+            circle.style.transform = 'scale(1.1)';
+            circle.style.boxShadow = '0 15px 35px rgba(76, 175, 80, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2)';
+            
+            // Simular nueva lectura
+            const newAngle = Math.random() * 90 + 20;
+            needle.style.transform = `translateX(-50%) rotate(${newAngle}deg)`;
+            needle.style.background = '#4caf50';
+            needle.style.boxShadow = '0 0 20px rgba(76, 175, 80, 0.8)';
+            
+            setTimeout(() => {
+                circle.style.transform = 'scale(1)';
+                circle.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.1)';
+                needle.style.background = 'white';
+                needle.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.8)';
+            }, 1000);
+        }
+
+        function handleHomeClick() {
+            const homeIcon = document.querySelector('.home-icon');
+            const container = document.querySelector('.mobile-container');
+            
+            // Efecto de "ir a casa"
+            homeIcon.style.transform = 'scale(1.3) rotate(180deg)';
+            homeIcon.style.background = 'rgba(76, 175, 80, 0.3)';
+            container.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                homeIcon.style.transform = 'scale(1) rotate(0deg)';
+                homeIcon.style.background = 'rgba(0, 0, 0, 0.25)';
+                container.style.transform = 'scale(1)';
+            }, 400);
+        }
+    </script>
+</body>
+</html>
